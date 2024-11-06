@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dot Matrix Input Example</title>
+    <script src="./../dotMatrixInput.js" type="module" defer></script>
+</head>
+<body>
+    <dot-matrix-input value="5"></dot-matrix-input>
+    +
+    <dot-matrix-input value="5"></dot-matrix-input>
+    =
+    <dot-matrix-input value="10" disabled></dot-matrix-input>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Select all dot-matrix-input elements
+            const dotMatrixInputs = document.querySelectorAll('dot-matrix-input');
+
+            // Function to update the total value
+            const updateTotalValue = () => {
+                const value1 = parseInt(dotMatrixInputs[0].value) || 0;
+                const value2 = parseInt(dotMatrixInputs[1].value) || 0;
+                dotMatrixInputs[2].value = value1 + value2;
+            };
+
+            updateTotalValue(); // Updates the total value
+
+            // Attach input event listeners to both input components
+            dotMatrixInputs[0].addEventListener('input', updateTotalValue);
+            dotMatrixInputs[1].addEventListener('input', updateTotalValue);
+        });
+    </script>
+</body>
+</html>

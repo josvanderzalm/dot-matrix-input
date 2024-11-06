@@ -1,11 +1,14 @@
-class DotMatrixInput extends HTMLElement {
+// Define the DotMatrixInput class as an ES module
+export class DotMatrixInput extends HTMLElement {
     constructor() {
         super();
-        this.attachShadow({ mode: 'open' });
+        // Attach the shadow DOM in closed mode
+        const shadowRoot = this.attachShadow({ mode: 'closed' }); // Store the reference
 
         this.maxDots = 500; // Set a limit on the maximum number of dots to display
 
-        this.shadowRoot.innerHTML = `
+        // Set the inner HTML of the shadow root
+        shadowRoot.innerHTML = `
             <style>
                 :host {
                     display: block;
@@ -37,17 +40,35 @@ class DotMatrixInput extends HTMLElement {
                 }
             </style>
         `;
-        
+
         // Create input element
         this.input = document.createElement('input');
         this.input.type = 'number';
-        this.input.addEventListener('input', () => this.updateMatrix());
+        this.input.addEventListener('input', () => {
+            this.updateMatrix();
+            this.dispatchEvent(new Event('input')); // Dispatch input event
+        });
+
+        // Dispatch change event when the input loses focus
+        this.input.addEventListener('change', () => {
+            this.dispatchEvent(new Event('change'));
+        });
+
+        // Dispatch focus and blur events
+        this.input.addEventListener('focus', () => {
+            this.dispatchEvent(new Event('focus'));
+        });
+
+        this.input.addEventListener('blur', () => {
+            this.dispatchEvent(new Event('blur'));
+        });
 
         // Create container for dots
         this.dotContainer = document.createElement('div');
         this.dotContainer.classList.add('dot-container');
 
-        this.shadowRoot.append(this.input, this.dotContainer);
+        // Append the input and dot container to the shadow root
+        shadowRoot.append(this.input, this.dotContainer);
     }
 
     static get observedAttributes() {
@@ -123,4 +144,5 @@ class DotMatrixInput extends HTMLElement {
     }
 }
 
+// Define the custom element
 customElements.define('dot-matrix-input', DotMatrixInput);
